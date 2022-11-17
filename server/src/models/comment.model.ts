@@ -4,7 +4,7 @@ export interface CommentInput {
     desc: string
 }
 
-export interface CommentModal extends CommentInput, Document {
+export interface CommentModel extends CommentInput, Document {
     userId: string
     videoId: string
 }
@@ -27,4 +27,4 @@ const CommentSchema: Schema = new Schema(
     { timestamps: true }
 )
 
-export default model<CommentModal>('Comment', CommentSchema)
+export default model<CommentModel>('Comment', CommentSchema)

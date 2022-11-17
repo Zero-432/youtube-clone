@@ -7,7 +7,7 @@ export interface VideoInput {
     videoUrl: string
 }
 
-export interface VideoModal extends VideoInput, Document {
+export interface VideoModel extends VideoInput, Document {
     userId: string
     views: number
     tags: [string]
@@ -57,4 +57,4 @@ const VideoSchema: Schema = new Schema(
     { timestamps: true }
 )
 
-export default model<VideoModal>('Video', VideoSchema)
+export default model<VideoModel>('Video', VideoSchema)
