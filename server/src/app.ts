@@ -34,22 +34,10 @@ app.use((req, res, next) => {
     next()
 })
 
-/** Error handling */
-// app.use((req, res, next) => {
-//     const error = new Error('Not found')
-
-//     Logging.error(error)
-
-//     res.status(404).json({
-//         message: error.message,
-//     })
-// })
-
 app.listen(config.server.port, async () => {
     Logging.info(`Server is running on port ${config.server.port}`)
 
     await connect()
 
     routes(app)
-
 })
