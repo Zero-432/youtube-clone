@@ -1,4 +1,5 @@
 import express from 'express'
+import cookieParser from 'cookie-parser'
 import { config } from './config/config'
 import Logging from './library/Logging'
 import routes from './routes'
@@ -6,6 +7,7 @@ import connect from './utils/connect'
 
 const app = express()
 
+app.use(cookieParser())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 

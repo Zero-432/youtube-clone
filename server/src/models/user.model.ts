@@ -12,6 +12,7 @@ export interface UserModel extends UserInput, Document {
     subscribers: number
     subscribedUsers: [string]
     fromGoogle: boolean
+    comparePassword(password: string): Promise<Boolean>
 }
 
 const UserSchema: Schema = new Schema(
