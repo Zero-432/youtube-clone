@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { deleteUser, dislike, getUser, like, subscribe, unsubscribe, update } from '../controllers/user.controller'
+import { deleteUserHandler, dislike, getUserHandler, like, subscribe, unsubscribe, update } from '../controllers/user.controller'
 import { verifyToken } from '../utils/jwt.verifyToken'
 
 const router = Router()
@@ -8,10 +8,10 @@ const router = Router()
 router.put('/:id', verifyToken, update)
 
 //delete user
-router.delete('/:id', verifyToken, deleteUser)
+router.delete('/:id', verifyToken, deleteUserHandler)
 
 //get a user
-router.get('/find/:id', getUser)
+router.get('/find/:id', getUserHandler)
 
 //subscribe a user
 router.put('/sub/:id', verifyToken, subscribe)
