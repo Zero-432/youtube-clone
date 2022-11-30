@@ -1,4 +1,5 @@
 import Video, { VideoModel } from '../models/video.model'
+import User from '../models/user.model'
 
 export async function createVideo(id: string, input: VideoModel) {
     try {
@@ -56,4 +57,32 @@ export async function addViewVid(id: string) {
     return Video.findByIdAndUpdate(id, {
         $inc: { views: 1 },
     })
+}
+
+export async function randomVideo() {
+    return Video.aggregate([{ $sample: { size: 40 } }])
+}
+
+export async function trendVideo() {
+    return Video.find().sort({ views: -1 })
+}
+
+export async function subVideo(idUser: string) {
+    try {
+        const user = await User.findById(idUser)
+        const subscribedChannels = user?.subscribedUsers
+
+        const list = await Promise.all(
+            (subscribedChannels as [string]).map(async (channelId: string) => {
+                return await Video.find({ userId: channelId })
+            })
+        )
+        return list
+    } catch (err: any) {
+        throw new Error(err.message)
+    }
+}
+
+export async function tag(idVideo: string) {
+     
 }

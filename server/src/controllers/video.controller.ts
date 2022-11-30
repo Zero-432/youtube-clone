@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import Logging from '../library/Logging'
-import { addViewVid, createVideo, deleteVid, getVid, update } from '../service/video.service'
+import { addViewVid, createVideo, deleteVid, getVid, randomVideo, subVideo, trendVideo, update } from '../service/video.service'
 import Error from '../utils/Error'
 
 export const addVideo = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
@@ -48,6 +48,52 @@ export const addView = async (req: Request, res: Response, next: NextFunction): 
     try {
         await addViewVid(req.params.id)
         res.status(200).json('The view has been increased.')
+    } catch (err) {
+        Logging.error(err)
+        Error(err, res)
+    }
+}
+
+export const random = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
+    try {
+        const videos = await randomVideo()
+        res.status(200).json(videos)
+    } catch (err) {
+        Logging.error(err)
+        Error(err, res)
+    }
+}
+
+export const trend = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
+    try {
+        const videos = await trendVideo()
+        res.status(200).json(videos)
+    } catch (err) {
+        Logging.error(err)
+        Error(err, res)
+    }
+}
+
+export const sub = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
+    try {
+        const listSubscribedVideos = await subVideo(req.user?.id)
+        res.status(200).json(listSubscribedVideos.flat().sort((a: any, b: any) => b.createdAt - a.createdAt))
+    } catch (err) {
+        Logging.error(err)
+        Error(err, res)
+    }
+}
+
+export const getByTag = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
+    try {
+    } catch (err) {
+        Logging.error(err)
+        Error(err, res)
+    }
+}
+
+export const search = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
+    try {
     } catch (err) {
         Logging.error(err)
         Error(err, res)
