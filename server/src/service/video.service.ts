@@ -83,6 +83,11 @@ export async function subVideo(idUser: string) {
     }
 }
 
-export async function tag(idVideo: string) {
-     
+export async function tagVideo(tagsVideo: string) {
+    const tags = tagsVideo.split(',')
+    return await Video.find({ tags: { $in: tags } }).limit(20)
+}
+
+export async function searchVideo(input: string) {
+    return await Video.find({ title: { $regex: input, $options: 'i' } }).limit(40)
 }

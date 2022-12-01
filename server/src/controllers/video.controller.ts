@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import Logging from '../library/Logging'
-import { addViewVid, createVideo, deleteVid, getVid, randomVideo, subVideo, trendVideo, update } from '../service/video.service'
+import { addViewVid, createVideo, deleteVid, getVid, randomVideo, searchVideo, subVideo, tagVideo, trendVideo, update } from '../service/video.service'
 import Error from '../utils/Error'
 
 export const addVideo = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
@@ -86,6 +86,8 @@ export const sub = async (req: Request, res: Response, next: NextFunction): Prom
 
 export const getByTag = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
     try {
+        const videos = await tagVideo(req.query.tags as string)
+        res.status(200).json(videos)
     } catch (err) {
         Logging.error(err)
         Error(err, res)
@@ -94,6 +96,8 @@ export const getByTag = async (req: Request, res: Response, next: NextFunction):
 
 export const search = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
     try {
+        const videos = await searchVideo(req.query.q as string)
+        res.status(200).json(videos)
     } catch (err) {
         Logging.error(err)
         Error(err, res)
