@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import Logging from '../library/Logging'
 import Error from '../utils/Error'
 import User from '../models/user.model'
-import { deleteUser, getUser, subscribeUser, unsubscribeUser, updateUser } from '../service/user.service'
+import { deleteUser, dislikeVideo, getUser, likeVideo, subscribeUser, unsubscribeUser, updateUser } from '../service/user.service'
 
 export const update = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
     if (req.params.id === req.user?.id) {
@@ -23,7 +23,7 @@ export const deleteUserHandler = async (req: Request, res: Response, next: NextF
         try {
             await deleteUser(req.user.id)
             res.status(200).json('User has been deleted.')
-        } catch (err) {
+        } catch (err: any) {
             Logging.error(err)
             Error(err, res)
         }
@@ -35,7 +35,7 @@ export const getUserHandler = async (req: Request, res: Response, next: NextFunc
     try {
         const user = await getUser(req.params.id)
         res.status(200).json(user)
-    } catch (err) {
+    } catch (err: any) {
         Logging.error(err)
         Error(err, res)
     }
@@ -46,7 +46,7 @@ export const subscribe = async (req: Request, res: Response, next: NextFunction)
         await subscribeObj.subscribeUser
         await subscribeObj.subscriber
         res.status(200).json('Subscription Successful!')
-    } catch (err) {
+    } catch (err: any) {
         Logging.error(err)
         Error(err, res)
     }
@@ -57,10 +57,26 @@ export const unsubscribe = async (req: Request, res: Response, next: NextFunctio
         await unsubscribeObj.subscribeUser
         await unsubscribeObj.subscriber
         res.status(200).json('Unsubscription Successful!')
-    } catch (err) {
+    } catch (err: any) {
         Logging.error(err)
         Error(err, res)
     }
 }
-export const like = (req: Request, res: Response, next: NextFunction) => {}
-export const dislike = (req: Request, res: Response, next: NextFunction) => {}
+export const like = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        await likeVideo(req.user?.id, req.params.videoId)
+        res.status(200).json('The video has been liked.')
+    } catch (err: any) {
+        Logging.error(err)
+        Error(err, res)
+    }
+}
+export const dislike = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        await dislikeVideo(req.user?.id, req.params.videoId)
+        res.status(200).json('The video has been disliked.')
+    } catch (err: any) {
+        Logging.error(err)
+        Error(err, res)
+    }
+}

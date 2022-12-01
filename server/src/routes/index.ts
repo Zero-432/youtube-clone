@@ -2,6 +2,7 @@ import { Express, Request, Response } from 'express'
 import authRoutes from './auth'
 import userRoutes from './users'
 import videoRoutes from './videos'
+import commentRoutes from './comments'
 
 function routes(app: Express) {
     /** Healthcheck */
@@ -11,6 +12,8 @@ function routes(app: Express) {
     app.use('/api/users', userRoutes)
     /** Video */
     app.use('/api/videos', videoRoutes)
+    /** Commnents */
+    app.use('/api/comments', commentRoutes)
 }
 
 export default routes

@@ -1,4 +1,5 @@
 import User, { UserInput } from '../models/user.model'
+import Video from '../models/video.model'
 
 export async function updateUser(id: string, input: UserInput) {
     return User.findByIdAndUpdate(
@@ -31,7 +32,7 @@ export async function subscribeUser(idUser: string, idOther: string) {
     return subscribe
 }
 
-export async function unsubscribeUser(idUser:string, idOther: string) {
+export async function unsubscribeUser(idUser: string, idOther: string) {
     const unsubscribe = {
         subscribeUser: User.findByIdAndUpdate(idUser, {
             $pull: { subscribedUsers: idOther },
@@ -42,4 +43,18 @@ export async function unsubscribeUser(idUser:string, idOther: string) {
     }
 
     return unsubscribe
+}
+
+export async function likeVideo(idUser: string, idVideo: string) {
+    return await Video.findByIdAndUpdate(idVideo, {
+        $addToSet: { likes: idUser },
+        $pull: { dislikes: idUser },
+    })
+}
+
+export async function dislikeVideo(idUser: string, idVideo: string) {
+    return await Video.findByIdAndUpdate(idVideo, {
+        $addToSet: { dislikes: idUser },
+        $pull: { likes: idUser },
+    })
 }
