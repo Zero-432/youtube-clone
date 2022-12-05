@@ -17,9 +17,9 @@ export const signup = async (req: Request, res: Response, next: NextFunction): P
 export const signin = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
     try {
         const { email, password } = req.body
-        const token = await login(email, password)
+        const { token, dataUser } = await login(email, password)
 
-        res.cookie('access_token', token, { httpOnly: true }).status(200).json(token)
+        res.cookie('access_token', token, { httpOnly: true }).status(200).json(dataUser)
     } catch (err: any) {
         Logging.error(err)
         Error(err, res)

@@ -18,7 +18,12 @@ export async function login(email: string, password: string) {
         }
 
         if (await user.comparePassword(password)) {
-            return createToken(user)
+            const objUser = user.toObject()
+            const { password, ...others } = objUser
+            return {
+                dataUser: others,
+                token: createToken(user),
+            }
         } else {
             throw new Error('Wrong credentials given')
         }
