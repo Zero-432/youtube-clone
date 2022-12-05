@@ -26,7 +26,7 @@ const Menu = ({ darkMode, setDarkMode }: { darkMode: boolean; setDarkMode: Dispa
                 <Link to='/' style={{ textDecoration: 'none', color: 'inherit' }}>
                     <Logo>
                         <Img src={LamaTube} />
-                        LamaTube
+                        ZeroTube
                     </Logo>
                 </Link>
                 <Link to='/' style={{ textDecoration: 'none', color: 'inherit' }}>
