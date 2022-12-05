@@ -1,13 +1,7 @@
 import axios from 'axios'
 import React, { useState, useEffect, FunctionComponent } from 'react'
-import styled from 'styled-components'
-import Card from '../components/Card'
-
-const Container = styled.div`
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-`
+import Card from '../../components/card/Card'
+import { Container } from './home.styled'
 
 const Home = ({ type }: { type: string }) => {
     const [videos, setVideos] = useState([])

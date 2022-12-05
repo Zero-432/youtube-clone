@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import styled, { ThemeProvider } from 'styled-components'
-import Menu from './components/Menu'
-import Navbar from './components/Navbar'
+import Menu from './components/menu/Menu'
+import Navbar from './components/navbar/Navbar'
 import { darkTheme, lightTheme } from './utils/Theme'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Home from './pages/Home'
-import Video from './pages/Video'
-import SignIn from './pages/SignIn'
+import Home from './pages/home/Home'
+import Video from './pages/video/Video'
+import SignIn from './pages/signin/SignIn'
 
 const Container = styled.div`
     display: flex;
@@ -34,7 +34,7 @@ function App() {
                             <Routes>
                                 <Route path='/'>
                                     <Route index element={<Home type='random' />} />
-                                    <Route path='trend' element={<Home type='trend' />} />
+                                    <Route path='trends' element={<Home type='trend' />} />
                                     <Route path='subscriptions' element={<Home type='sub' />} />
                                     <Route path='signin' element={<SignIn />} />
                                     <Route path='video'>
