@@ -18,8 +18,11 @@ import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined'
 import SettingsBrightnessOutlinedIcon from '@mui/icons-material/SettingsBrightnessOutlined'
 import { Link } from 'react-router-dom'
 import { Button, Container, Hr, Img, Item, Login, Logo, Title, Wrapper } from './menu.styled'
+import { useAppSelector } from '../../app/hooks'
 
 const Menu = ({ darkMode, setDarkMode }: { darkMode: boolean; setDarkMode: Dispatch<SetStateAction<boolean>> }) => {
+    const { currentUser } = useAppSelector((state) => state.user)
+
     return (
         <Container>
             <Wrapper>
@@ -57,16 +60,20 @@ const Menu = ({ darkMode, setDarkMode }: { darkMode: boolean; setDarkMode: Dispa
                     History
                 </Item>
                 <Hr />
-                <Login>
-                    Sign in to like videos, comment, and subscribe.
-                    <Link to='signin' style={{ textDecoration: 'none' }}>
-                        <Button>
-                            <AccountCircleOutlinedIcon />
-                            SIGN IN
-                        </Button>
-                    </Link>
-                </Login>
-                <Hr />
+                {!currentUser && (
+                    <>
+                        <Login>
+                            Sign in to like videos, comment, and subscribe.
+                            <Link to='signin' style={{ textDecoration: 'none' }}>
+                                <Button>
+                                    <AccountCircleOutlinedIcon />
+                                    SIGN IN
+                                </Button>
+                            </Link>
+                        </Login>
+                        <Hr />
+                    </>
+                )}
                 <Title>BEST OF LAMATUBE</Title>
                 <Item>
                     <LibraryMusicOutlinedIcon />
