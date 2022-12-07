@@ -31,3 +31,26 @@ export async function login(email: string, password: string) {
         throw new Error(err.message)
     }
 }
+
+export async function loginGoogle(input: UserInput) {
+    try {
+        const user = await User.findOne({ email: input.email })
+        if (user) {
+            const objUser = user.toObject()
+            return {
+                dataUser: objUser,
+                token: createToken(user),
+            }
+        } else {
+            const newUser = new User({ ...input, fromGoogle: true })
+            const savedUser = await newUser.save()
+            const objUser = savedUser.toObject()
+            return {
+                dataUser: objUser,
+                token: createToken(savedUser),
+            }
+        }
+    } catch (err: any) {
+        throw new Error(err.message)
+    }
+}
