@@ -57,9 +57,10 @@ export const User = styled.div`
     color: ${({ theme }) => theme.text};
 `
 
-export const Avatar = styled.img`
+export const AvatarIcon = styled.img`
     width: 32px;
     height: 32px;
     border-radius: 50%;
     background-color: #999;
+    cursor: pointer;
 `

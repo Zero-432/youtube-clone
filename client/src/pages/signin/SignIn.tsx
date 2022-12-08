@@ -1,5 +1,6 @@
 import axios from 'axios'
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAppDispatch } from '../../app/hooks'
 import { login, loginFailure, loginSuccess } from '../../redux/userSlice'
 import { Button, Container, Input, Link, Links, More, SubTitle, Title, Wrapper } from './signin.styled'
@@ -13,8 +14,9 @@ const SignIn = () => {
     const [email, setEmail] = useState('')
 
     const dispatch = useAppDispatch()
+    const navigate = useNavigate()
 
-    const handleLogin = (type: string) => async (e: any) => {
+    const handleLogin = (type: string) => async (e: React.KeyboardEvent | React.MouseEvent) => {
         e.preventDefault()
         dispatch(login())
         let res
@@ -30,12 +32,13 @@ const SignIn = () => {
                 })
             }
             dispatch(loginSuccess(res?.data))
+            navigate('/')
         } catch (err) {
             dispatch(loginFailure())
         }
     }
 
-    const handleRegister = async (e: any) => {
+    const handleRegister = async (e: React.KeyboardEvent | React.MouseEvent) => {
         e.preventDefault()
         try {
             await axios.post('/auth/signup', { name, email, password })

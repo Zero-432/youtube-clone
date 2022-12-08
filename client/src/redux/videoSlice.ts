@@ -1,47 +1,38 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { User } from '../models/user'
+import { Video } from '../models/video'
 
-export interface UserState {
-    currentUser?: User
-    isLoggedIn: boolean
+export interface VideoState {
+    currentVideo?: Video
     loading?: boolean
     error: boolean
 }
 
-const initialState: UserState = {
-    currentUser: undefined,
-    isLoggedIn: false,
+const initialState: VideoState = {
+    currentVideo: undefined,
     loading: false,
     error: false,
 }
 
 const videoSlice = createSlice({
-    name: 'user',
+    name: 'video',
     initialState,
     reducers: {
-        login: (state) => {
+        fetchStart: (state) => {
             state.loading = true
         },
-        loginSuccess: (state, action: PayloadAction<User>) => {
-            state.isLoggedIn = true
+        fetchSuccess: (state, action: PayloadAction<Video>) => {
             state.loading = false
-            state.currentUser = action.payload
+            state.currentVideo = action.payload
         },
-        loginFailure: (state) => {
+        fetchFailure: (state) => {
             state.loading = false
             state.error = true
-        },
-        logout: (state) => {
-            state.isLoggedIn = false
-            state.loading = false
-            state.error = false
-            state.currentUser = undefined
         },
     },
 })
 
 // Actions
-export const { login, loginSuccess, loginFailure, logout } = videoSlice.actions
+export const { fetchStart, fetchSuccess, fetchFailure } = videoSlice.actions
 
 // Reducer
 export default videoSlice.reducer

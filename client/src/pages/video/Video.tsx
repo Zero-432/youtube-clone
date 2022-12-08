@@ -1,4 +1,5 @@
-import React from 'react'
+import axios from 'axios'
+import React, { useState, useEffect } from 'react'
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined'
 import ThumbDownOffAltOutlinedIcon from '@mui/icons-material/ThumbDownOffAltOutlined'
 import ReplyOutlinedIcon from '@mui/icons-material/ReplyOutlined'
@@ -26,7 +27,34 @@ import {
     VideoWrapper,
 } from './video.styled'
 
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { useLocation } from 'react-router-dom'
+import { fetchSuccess } from '../../redux/videoSlice'
+
 const Video = () => {
+    const { currentUser } = useAppSelector((state) => state.user)
+    const { currentVideo } = useAppSelector((state) => state.video)
+    const dispatch = useAppDispatch()
+
+    const path = useLocation().pathname.split('/')[2]
+
+    const [channel, setChannel] = useState({})
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const videoRes = await axios.get(`videos/find/${path}`)
+                const channelRes = await axios.get(`users/find/${videoRes.data.userId}`)
+
+                setChannel(channelRes.data)
+                dispatch(fetchSuccess(videoRes.data))
+            } catch (err) {}
+        }
+        fetchData()
+    }, [path, dispatch])
+
+    console.log(currentVideo)
+
     return (
         <Container>
             <Content>
