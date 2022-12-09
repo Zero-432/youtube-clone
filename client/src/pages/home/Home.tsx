@@ -1,5 +1,6 @@
 import axios from 'axios'
 import React, { useState, useEffect, FunctionComponent } from 'react'
+import { getListVideo } from '../../api/videoApi'
 import Card from '../../components/card/Card'
 import { Container } from './home.styled'
 
@@ -8,7 +9,7 @@ const Home = ({ type }: { type: string }) => {
 
     useEffect(() => {
         const fetchVideo = async () => {
-            const res = await axios.get(`/videos/${type}`)
+            const res = await getListVideo(type)
             setVideos(res.data)
         }
         fetchVideo()

@@ -30,6 +30,10 @@ import {
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { useLocation } from 'react-router-dom'
 import { fetchSuccess } from '../../redux/videoSlice'
+import { getVideo } from '../../api/videoApi'
+import { getUser } from '../../api/userApi'
+import { format } from 'timeago.js'
+import { User } from '../../models/user'
 
 const Video = () => {
     const { currentUser } = useAppSelector((state) => state.user)
@@ -38,13 +42,13 @@ const Video = () => {
 
     const path = useLocation().pathname.split('/')[2]
 
-    const [channel, setChannel] = useState({})
+    const [channel, setChannel] = useState<User>()
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const videoRes = await axios.get(`videos/find/${path}`)
-                const channelRes = await axios.get(`users/find/${videoRes.data.userId}`)
+                const videoRes = await getVideo(path)
+                const channelRes = await getUser(videoRes.data.userId)
 
                 setChannel(channelRes.data)
                 dispatch(fetchSuccess(videoRes.data))
@@ -52,8 +56,6 @@ const Video = () => {
         }
         fetchData()
     }, [path, dispatch])
-
-    console.log(currentVideo)
 
     return (
         <Container>
@@ -69,15 +71,17 @@ const Video = () => {
                         allowFullScreen
                     ></iframe>
                 </VideoWrapper>
-                <Title>Test Video</Title>
+                <Title>{currentVideo?.title}</Title>
                 <Details>
-                    <Info>7,948,154 views • Jun 22, 2022</Info>
+                    <Info>
+                        {currentVideo?.views} views • {format(currentVideo?.createdAt!)}
+                    </Info>
                     <Buttons>
                         <Button>
-                            <ThumbUpOutlinedIcon /> 123
+                            <ThumbUpOutlinedIcon /> {currentVideo?.likes.length}
                         </Button>
                         <Button>
-                            <ThumbDownOffAltOutlinedIcon /> Dislike
+                            <ThumbDownOffAltOutlinedIcon /> {currentVideo?.dislikes.length}
                         </Button>
                         <Button>
                             <ReplyOutlinedIcon /> Share
@@ -90,14 +94,11 @@ const Video = () => {
                 <Hr />
                 <Channel>
                     <ChannelInfo>
-                        <Image src='https://yt3.ggpht.com/yti/APfAmoE-Q0ZLJ4vk3vqmV4Kwp0sbrjxLyB8Q4ZgNsiRH=s88-c-k-c0x00ffffff-no-rj-mo' />
+                        <Image src={channel?.img} />
                         <ChannelDetail>
-                            <ChannelName>Lama Dev</ChannelName>
-                            <ChannelCounter>200K subscribers</ChannelCounter>
-                            <Description>
-                                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Doloribus laborum delectus unde quaerat dolore culpa sit aliquam at. Vitae facere ipsum totam ratione
-                                exercitationem. Suscipit animi accusantium dolores ipsam ut.
-                            </Description>
+                            <ChannelName>{channel?.name}</ChannelName>
+                            <ChannelCounter>{channel?.subscribers} subscribers</ChannelCounter>
+                            <Description>{currentVideo?.desc}</Description>
                         </ChannelDetail>
                     </ChannelInfo>
                     <Subscribe>SUBSCRIBE</Subscribe>

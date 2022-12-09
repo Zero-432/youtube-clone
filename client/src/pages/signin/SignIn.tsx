@@ -7,6 +7,7 @@ import { Button, Container, Input, Link, Links, More, SubTitle, Title, Wrapper }
 
 import { auth, provider } from '../../firebase'
 import { signInWithPopup } from 'firebase/auth'
+import { googleSignin, signin, signup } from '../../api/authApi'
 
 const SignIn = () => {
     const [name, setName] = useState('')
@@ -22,10 +23,10 @@ const SignIn = () => {
         let res
         try {
             if (type === 'normal') {
-                res = await axios.post('/auth/signin', { email, password })
+                res = await signin({ email, password })
             } else {
                 const result = await signInWithPopup(auth, provider)
-                res = await axios.post('/auth/google', {
+                res = await googleSignin({
                     name: result.user.displayName,
                     email: result.user.email,
                     img: result.user.photoURL,
@@ -41,7 +42,7 @@ const SignIn = () => {
     const handleRegister = async (e: React.KeyboardEvent | React.MouseEvent) => {
         e.preventDefault()
         try {
-            await axios.post('/auth/signup', { name, email, password })
+            await signup({ name, email, password })
         } catch (err) {}
     }
 

@@ -2,20 +2,17 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { format } from 'timeago.js'
+import { getUser } from '../../api/userApi'
+import { User } from '../../models/user'
 import { Video } from '../../models/video'
 import { ChannelImage, ChannelName, Container, Details, Info, Texts, Title, Image } from './card,styled'
 
-type Channel = {
-    name: string
-    img: string
-}
-
 const Card = ({ type, video }: { type: string; video: Video }) => {
-    const [channel, setChannel] = useState<Channel>()
+    const [channel, setChannel] = useState<User>()
 
     useEffect(() => {
         const fetchChannel = async () => {
-            const res = await axios.get(`/users/find/${video.userId}`)
+            const res = await getUser(video.userId)
             setChannel(res.data)
         }
         fetchChannel()
