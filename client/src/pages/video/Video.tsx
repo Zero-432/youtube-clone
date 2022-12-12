@@ -31,8 +31,9 @@ import {
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { useLocation } from 'react-router-dom'
 import { fetchSuccess, like, dislike } from '../../redux/videoSlice'
+import { subscription } from '../../redux/userSlice'
 import { getVideo } from '../../api/videoApi'
-import { addDislike, getUser, addLike } from '../../api/userApi'
+import { addDislike, getUser, addLike, subscribe, unsubscribe } from '../../api/userApi'
 import { format } from 'timeago.js'
 import { User } from '../../models/user'
 
@@ -60,25 +61,32 @@ const Video = () => {
 
     const handleClick = (type: string) => async () => {
         if (type === 'like') {
-            await addLike(currentVideo?._id!, currentUser?.token!)
+            await addLike(currentVideo?._id!)
             dispatch(like(currentVideo?._id!))
         } else if (type === 'dislike') {
-            await addDislike(currentVideo?._id!, currentUser?.token!)
+            await addDislike(currentVideo?._id!)
             dispatch(dislike(currentVideo?._id!))
+        } else if (type === 'subscribe') {
+            currentUser?.subscribedUsers.includes(channel?._id!) ? await unsubscribe(channel?._id!) : await subscribe(channel?._id!)
+            dispatch(subscription(channel?._id!))
         }
     }
+
+    console.log(channel?._id)
+    console.log(currentUser)
+    console.log(currentUser?.subscribedUsers.includes(channel?._id!))
 
     return (
         <Container>
             <Content>
                 <VideoWrapper>
                     <iframe
-                        width="100%"
-                        height="506"
-                        src="https://www.youtube.com/embed/v1ADEPnPt54"
-                        title="YouTube video player"
-                        frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        width='100%'
+                        height='506'
+                        src='https://www.youtube.com/embed/v1ADEPnPt54'
+                        title='YouTube video player'
+                        frameBorder='0'
+                        allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
                         allowFullScreen
                     ></iframe>
                 </VideoWrapper>
@@ -93,7 +101,8 @@ const Video = () => {
                             {currentVideo?.likes.length}
                         </Button>
                         <Button onClick={handleClick('dislike')}>
-                            {currentVideo?.likes.includes(currentUser?._id!) ? <ThumbDownIcon /> : <ThumbDownOffAltOutlinedIcon />} {currentVideo?.dislikes.length}
+                            {currentVideo?.dislikes.includes(currentUser?._id!) ? <ThumbDownIcon /> : <ThumbDownOffAltOutlinedIcon />}
+                            {currentVideo?.dislikes.length}
                         </Button>
                         <Button>
                             <ReplyOutlinedIcon /> Share
@@ -113,7 +122,7 @@ const Video = () => {
                             <Description>{currentVideo?.desc}</Description>
                         </ChannelDetail>
                     </ChannelInfo>
-                    <Subscribe>SUBSCRIBE</Subscribe>
+                    <Subscribe onClick={handleClick('subscribe')}>{currentUser?.subscribedUsers.includes(channel?._id!) ? 'SUBSCRIBED' : 'SUBSCRIBE'}</Subscribe>
                 </Channel>
                 <Hr />
                 <Comments />
