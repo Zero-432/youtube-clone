@@ -26,6 +26,8 @@ const SignIn = () => {
                 res = await signin({ email, password })
             } else {
                 const result = await signInWithPopup(auth, provider)
+                console.log(result)
+
                 res = await googleSignin({
                     name: result.user.displayName,
                     email: result.user.email,
@@ -51,15 +53,15 @@ const SignIn = () => {
             <Wrapper>
                 <Title>Sign in</Title>
                 <SubTitle>to continue to ZeroTube</SubTitle>
-                <Input placeholder='email' onChange={(e) => setEmail(e.target.value)} />
-                <Input type='password' placeholder='password' onChange={(e) => setPassword(e.target.value)} />
+                <Input placeholder="email" onChange={(e) => setEmail(e.target.value)} />
+                <Input type="password" placeholder="password" onChange={(e) => setPassword(e.target.value)} />
                 <Button onClick={handleLogin('normal')}>Sign in</Button>
                 <Title>or</Title>
                 <Button onClick={handleLogin('google')}>Sign in with Google</Button>
                 <Title>or</Title>
-                <Input placeholder='username' onChange={(e) => setName(e.target.value)} />
-                <Input placeholder='email' onChange={(e) => setEmail(e.target.value)} />
-                <Input type='password' placeholder='password' onChange={(e) => setPassword(e.target.value)} />
+                <Input placeholder="username" onChange={(e) => setName(e.target.value)} />
+                <Input placeholder="email" onChange={(e) => setEmail(e.target.value)} />
+                <Input type="password" placeholder="password" onChange={(e) => setPassword(e.target.value)} />
                 <Button onClick={handleRegister}>Sign up</Button>
             </Wrapper>
             <More>

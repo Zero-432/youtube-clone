@@ -1,5 +1,6 @@
-import axios from 'axios'
 import React, { useState, useEffect } from 'react'
+import ThumbUpIcon from '@mui/icons-material/ThumbUp'
+import ThumbDownIcon from '@mui/icons-material/ThumbDown'
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined'
 import ThumbDownOffAltOutlinedIcon from '@mui/icons-material/ThumbDownOffAltOutlined'
 import ReplyOutlinedIcon from '@mui/icons-material/ReplyOutlined'
@@ -29,9 +30,9 @@ import {
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { useLocation } from 'react-router-dom'
-import { fetchSuccess } from '../../redux/videoSlice'
+import { fetchSuccess, like, dislike } from '../../redux/videoSlice'
 import { getVideo } from '../../api/videoApi'
-import { getUser } from '../../api/userApi'
+import { addDislike, getUser, addLike } from '../../api/userApi'
 import { format } from 'timeago.js'
 import { User } from '../../models/user'
 
@@ -57,17 +58,27 @@ const Video = () => {
         fetchData()
     }, [path, dispatch])
 
+    const handleClick = (type: string) => async () => {
+        if (type === 'like') {
+            await addLike(currentVideo?._id!, currentUser?.token!)
+            dispatch(like(currentVideo?._id!))
+        } else if (type === 'dislike') {
+            await addDislike(currentVideo?._id!, currentUser?.token!)
+            dispatch(dislike(currentVideo?._id!))
+        }
+    }
+
     return (
         <Container>
             <Content>
                 <VideoWrapper>
                     <iframe
-                        width='100%'
-                        height='720'
-                        src='https://www.youtube.com/embed/k3Vfj-e1Ma4'
-                        title='YouTube video player'
-                        frameBorder='0'
-                        allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+                        width="100%"
+                        height="506"
+                        src="https://www.youtube.com/embed/v1ADEPnPt54"
+                        title="YouTube video player"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
                     ></iframe>
                 </VideoWrapper>
@@ -77,11 +88,12 @@ const Video = () => {
                         {currentVideo?.views} views • {format(currentVideo?.createdAt!)}
                     </Info>
                     <Buttons>
-                        <Button>
-                            <ThumbUpOutlinedIcon /> {currentVideo?.likes.length}
+                        <Button onClick={handleClick('like')}>
+                            {currentVideo?.likes.includes(currentUser?._id!) ? <ThumbUpIcon /> : <ThumbUpOutlinedIcon />}
+                            {currentVideo?.likes.length}
                         </Button>
-                        <Button>
-                            <ThumbDownOffAltOutlinedIcon /> {currentVideo?.dislikes.length}
+                        <Button onClick={handleClick('dislike')}>
+                            {currentVideo?.likes.includes(currentUser?._id!) ? <ThumbDownIcon /> : <ThumbDownOffAltOutlinedIcon />} {currentVideo?.dislikes.length}
                         </Button>
                         <Button>
                             <ReplyOutlinedIcon /> Share

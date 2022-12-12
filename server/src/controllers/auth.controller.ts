@@ -17,9 +17,9 @@ export const signup = async (req: Request, res: Response, next: NextFunction): P
 export const signin = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
     try {
         const { email, password } = req.body
-        const { token, dataUser } = await login(email, password)
+        const { dataUser } = await login(email, password)
 
-        res.cookie('access_token', token, { httpOnly: true }).status(200).json(dataUser)
+        res.status(200).json(dataUser)
     } catch (err: any) {
         Logging.error(err)
         Error(err, res)
@@ -28,12 +28,8 @@ export const signin = async (req: Request, res: Response, next: NextFunction): P
 
 export const googleAuth = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
     try {
-        const { dataUser, token } = await loginGoogle(req.body)
-        res.cookie('access_token', token, {
-            httpOnly: true,
-        })
-            .status(200)
-            .json(dataUser)
+        const { dataUser } = await loginGoogle(req.body)
+        res.status(200).json(dataUser)
     } catch (err: any) {
         Logging.error(err)
         Error(err, res)
