@@ -12,13 +12,6 @@ const persistConfig = {
     storage,
 }
 
-// const userPersistConfig = {
-//     key: 'user',
-//     version: 1,
-//     storage,
-//     blacklist: []
-// }
-
 const rootReducer = combineReducers({ user: userReducer, video: videoReducer })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
