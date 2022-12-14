@@ -8,18 +8,29 @@ import { Avatar, Container, Input, NewComment } from './comments.styled'
 const Comments = ({ videoId }: { videoId: string }) => {
     const { currentUser } = useAppSelector((state) => state.user)
 
-    const [newComment, setNewComment] = useState<IComment>()
+    const [newComment, setNewComment] = useState({})
 
-    const [comments, setComments] = useState<[IComment]>()
+    const [comments, setComments] = useState<[IComment] | []>([])
 
     const handleChange = (e: any) => {
         setNewComment({
-            desc: e.target.value
+            videoId: videoId,
+            desc: e.target.value,
         })
     }
 
-    const handleKeyUp = async () => {
-        
+    const handleKeyPress = async (e: any) => {
+        if (e.key === 'Enter') {
+            e.preventDefault()
+            await addComment(newComment)
+            // error
+            // setComments((preState: any) => preState?.push(res.data))
+
+            const res = await getComment(videoId)
+            setComments(res.data)
+
+            e.target.value = ''
+        }
     }
 
     useEffect(() => {
@@ -32,13 +43,11 @@ const Comments = ({ videoId }: { videoId: string }) => {
         fetchComments()
     }, [videoId])
 
-    console.log(comments)
-
     return (
         <Container>
             <NewComment>
                 <Avatar src={currentUser?.img} />
-                <Input placeholder='Add a comment...' onChange={handleChange} onKeyUp={handleKeyUp} />
+                <Input placeholder="Add a comment..." onChange={handleChange} onKeyPress={handleKeyPress} />
             </NewComment>
             {comments?.map((comment: IComment) => (
                 <Comment key={comment._id} comment={comment} />
