@@ -54,7 +54,7 @@ const Video = () => {
 
                 setChannel(channelRes.data)
                 dispatch(fetchSuccess(videoRes.data))
-            } catch (err) {}
+            } catch (err: any) {}
         }
         fetchData()
     }, [path, dispatch])
@@ -62,19 +62,22 @@ const Video = () => {
     const handleClick = (type: string) => async () => {
         if (type === 'like') {
             await addLike(currentVideo?._id!)
-            dispatch(like(currentVideo?._id!))
+            dispatch(like(currentUser?._id!))
         } else if (type === 'dislike') {
             await addDislike(currentVideo?._id!)
-            dispatch(dislike(currentVideo?._id!))
+            dispatch(dislike(currentUser?._id!))
         } else if (type === 'subscribe') {
-            currentUser?.subscribedUsers.includes(channel?._id!) ? await unsubscribe(channel?._id!) : await subscribe(channel?._id!)
+            if (currentUser?.subscribedUsers.includes(channel?._id!)) {
+                await unsubscribe(channel?._id!)
+            } else {
+                await subscribe(channel?._id!)
+            }
+            const videoRes = await getVideo(path)
+            const refreshChannel = await getUser(videoRes.data.userId)
+            setChannel(refreshChannel.data)
             dispatch(subscription(channel?._id!))
         }
     }
-
-    console.log(channel?._id)
-    console.log(currentUser)
-    console.log(currentUser?.subscribedUsers.includes(channel?._id!))
 
     return (
         <Container>
@@ -125,7 +128,7 @@ const Video = () => {
                     <Subscribe onClick={handleClick('subscribe')}>{currentUser?.subscribedUsers.includes(channel?._id!) ? 'SUBSCRIBED' : 'SUBSCRIBE'}</Subscribe>
                 </Channel>
                 <Hr />
-                <Comments />
+                <Comments videoId={currentVideo?._id!} />
             </Content>
             <Recommendation>{/* <Card type='sm' /> */}</Recommendation>
         </Container>

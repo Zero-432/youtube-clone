@@ -1,21 +1,48 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { addComment, getComment } from '../../api/commentApi'
+import { useAppSelector } from '../../app/hooks'
+import { IComment } from '../../models/comment'
 import Comment from '../comment/Comment'
 import { Avatar, Container, Input, NewComment } from './comments.styled'
 
-const Comments = () => {
+const Comments = ({ videoId }: { videoId: string }) => {
+    const { currentUser } = useAppSelector((state) => state.user)
+
+    const [newComment, setNewComment] = useState<IComment>()
+
+    const [comments, setComments] = useState<[IComment]>()
+
+    const handleChange = (e: any) => {
+        setNewComment({
+            desc: e.target.value
+        })
+    }
+
+    const handleKeyUp = async () => {
+        
+    }
+
+    useEffect(() => {
+        const fetchComments = async () => {
+            try {
+                const res = await getComment(videoId)
+                setComments(res.data)
+            } catch (err: any) {}
+        }
+        fetchComments()
+    }, [videoId])
+
+    console.log(comments)
+
     return (
         <Container>
             <NewComment>
-                <Avatar src='https://yt3.ggpht.com/yti/APfAmoE-Q0ZLJ4vk3vqmV4Kwp0sbrjxLyB8Q4ZgNsiRH=s88-c-k-c0x00ffffff-no-rj-mo' />
-                <Input placeholder='Add a comment...' />
+                <Avatar src={currentUser?.img} />
+                <Input placeholder='Add a comment...' onChange={handleChange} onKeyUp={handleKeyUp} />
             </NewComment>
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
+            {comments?.map((comment: IComment) => (
+                <Comment key={comment._id} comment={comment} />
+            ))}
         </Container>
     )
 }

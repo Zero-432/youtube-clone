@@ -38,13 +38,13 @@ const userSlice = createSlice({
             state.currentUser = undefined
         },
         subscription: (state, action: PayloadAction<string>) => {
-            if (!state.currentUser?.subscribedUsers.includes(action.payload)) {
+            if (state.currentUser?.subscribedUsers.includes(action.payload)) {
                 state.currentUser?.subscribedUsers.splice(
                     state.currentUser.subscribedUsers.findIndex((userId) => userId === action.payload),
                     1
                 )
             } else {
-                state.currentUser.subscribedUsers.push(action.payload)
+                state.currentUser?.subscribedUsers.push(action.payload)
             }
         },
     },
