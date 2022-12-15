@@ -61,3 +61,7 @@ export const Links = styled.div`
 export const Link = styled.span`
     margin-left: 30px;
 `
+
+export const Label = styled.label`
+    
+`

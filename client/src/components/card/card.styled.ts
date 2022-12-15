@@ -30,7 +30,9 @@ export const ChannelImage = styled.img<{ type: string }>`
     display: ${(props) => props.type === 'sm' && 'none'};
 `
 
-export const Texts = styled.div``
+export const Texts = styled.div`
+    width: calc(100% - 48px);
+`
 
 export const Title = styled.h1`
     font-size: 16px;

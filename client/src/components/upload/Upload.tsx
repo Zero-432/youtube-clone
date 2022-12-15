@@ -1,13 +1,14 @@
 import React, { useEffect, useState, Dispatch, SetStateAction } from 'react'
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import app from '../../firebase'
-import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-import { Button, Close, Container, Desc, Input, Label, Title, Wrapper } from './upload.styled'
+import CloseIcon from '@mui/icons-material/Close'
+import { Button, Container, Desc, Input, Label, Title, Wrapper } from './upload.styled'
+import { addVideo } from '../../api/videoApi'
 
 const Upload = ({ setOpen }: { setOpen: Dispatch<SetStateAction<boolean>> }) => {
-    const [img, setImg] = useState('')
-    const [video, setVideo] = useState('')
+    const [img, setImg] = useState<File>()
+    const [video, setVideo] = useState<File>()
     const [imgPerc, setImgPerc] = useState(0)
     const [videoPerc, setVideoPerc] = useState(0)
     const [inputs, setInputs] = useState({})
@@ -25,7 +26,7 @@ const Upload = ({ setOpen }: { setOpen: Dispatch<SetStateAction<boolean>> }) => 
         setTags(e.target.value.split(','))
     }
 
-    const uploadFile = (file: any, urlType: string) => {
+    const uploadFile = (file: File, urlType: string) => {
         const storage = getStorage(app)
         const fileName = new Date().getTime() + file.name
         const storageRef = ref(storage, fileName)
@@ -68,7 +69,7 @@ const Upload = ({ setOpen }: { setOpen: Dispatch<SetStateAction<boolean>> }) => 
 
     const handleUpload = async (e: any) => {
         e.preventDefault()
-        const res = await axios.post('/videos', { ...inputs, tags })
+        const res = await addVideo({ ...inputs, tags })
         setOpen(false)
         res.status === 200 && navigate(`/video/${res.data._id}`)
     }
@@ -76,15 +77,15 @@ const Upload = ({ setOpen }: { setOpen: Dispatch<SetStateAction<boolean>> }) => 
     return (
         <Container>
             <Wrapper>
-                <Close onClick={() => setOpen(false)}>X</Close>
+                <CloseIcon style={{ position: 'absolute', top: '10px', right: '10px', cursor: 'pointer' }} onClick={() => setOpen(false)} />
                 <Title>Upload a New Video</Title>
                 <Label>Video:</Label>
-                {videoPerc > 0 ? 'Uploading:' + videoPerc : <Input type='file' accept='video/*' />}
+                {videoPerc > 0 ? 'Uploading:' + videoPerc : <Input type='file' accept='video/*' onChange={(e) => setVideo(e.target.files![0])} />}
                 <Input type='text' placeholder='Title' name='title' onChange={handleChange} />
                 <Desc placeholder='Description' name='desc' rows={8} onChange={handleChange} />
                 <Input type='text' placeholder='Separate the tags with commas.' onChange={handleTags} />
                 <Label>Image:</Label>
-                {imgPerc > 0 ? 'Uploading:' + imgPerc + '%' : <Input type='file' accept='image/*' />}
+                {imgPerc > 0 ? 'Uploading:' + imgPerc + '%' : <Input type='file' accept='image/*' onChange={(e) => setImg(e.target.files![0])} />}
                 <Button onClick={handleUpload}>Upload</Button>
             </Wrapper>
         </Container>
