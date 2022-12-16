@@ -51,10 +51,12 @@ const Menu = ({ darkMode, setDarkMode }: { darkMode: boolean; setDarkMode: Dispa
                     </Item>
                 </Link>
                 <Hr />
-                <Item>
-                    <VideoLibraryOutlinedIcon />
-                    Library
-                </Item>
+                <Link to='library' style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <Item>
+                        <VideoLibraryOutlinedIcon />
+                        Library
+                    </Item>
+                </Link>
                 <Item>
                     <HistoryOutlinedIcon />
                     History

@@ -26,10 +26,10 @@ const Upload = ({ setOpen }: { setOpen: Dispatch<SetStateAction<boolean>> }) => 
         setTags(e.target.value.split(','))
     }
 
-    const uploadFile = (file: File, urlType: string) => {
+    const uploadFile = (file: File, urlType: string, type: string) => {
         const storage = getStorage(app)
         const fileName = new Date().getTime() + file.name
-        const storageRef = ref(storage, fileName)
+        const storageRef = ref(storage, `${type}/${fileName}`)
         const uploadTask = uploadBytesResumable(storageRef, file)
 
         uploadTask.on(
@@ -60,11 +60,11 @@ const Upload = ({ setOpen }: { setOpen: Dispatch<SetStateAction<boolean>> }) => 
     }
 
     useEffect(() => {
-        video && uploadFile(video, 'videoUrl')
+        video && uploadFile(video, 'videoUrl', 'images')
     }, [video])
 
     useEffect(() => {
-        img && uploadFile(img, 'imgUrl')
+        img && uploadFile(img, 'imgUrl', 'videos')
     }, [img])
 
     const handleUpload = async (e: any) => {

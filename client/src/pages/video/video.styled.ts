@@ -84,6 +84,7 @@ export const ChannelCounter = styled.span`
 
 export const Description = styled.p`
     font-size: 14px;
+    white-space: pre-wrap;
 `
 
 export const Subscribe = styled.button`
@@ -94,5 +95,17 @@ export const Subscribe = styled.button`
     border-radius: 3px;
     height: max-content;
     padding: 10px 20px;
+    cursor: pointer;
+`
+
+export const VideoFrame = styled.video`
+    max-height: 720px;
+    width: 100%;
+    object-fit: cover;
+`
+
+export const ShowMoreButton = styled.a`
+    font-weight: bold;
+    color: ${({ theme }) => theme.text};
     cursor: pointer;
 `

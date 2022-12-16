@@ -18,7 +18,7 @@ const Home = ({ type }: { type: string }) => {
     return (
         <Container>
             {videos.map((video: any) => (
-                <Card type='' key={video._id} video={video} />
+                <Card type='' key={video._id} video={video} settingType={type} />
             ))}
         </Container>
     )

@@ -1,4 +1,9 @@
 import styled from 'styled-components'
+import { Link } from 'react-router-dom'
+
+export const LinkVideo = styled(Link)`
+    width: ${(props) => props.type !== 'sm' && '360px'};
+`
 
 export const Container = styled.div<{ type: string }>`
     width: ${(props) => props.type !== 'sm' && '360px'};
@@ -30,9 +35,13 @@ export const ChannelImage = styled.img<{ type: string }>`
     display: ${(props) => props.type === 'sm' && 'none'};
 `
 
-export const Texts = styled.div`
+export const TextWrapper = styled.div`
     width: calc(100% - 48px);
+    display: flex;
+    justify-content: space-between;
 `
+
+export const Texts = styled.div``
 
 export const Title = styled.h1`
     font-size: 16px;
@@ -49,4 +58,12 @@ export const ChannelName = styled.h2`
 export const Info = styled.div`
     font-size: 14px;
     color: ${({ theme }) => theme.textSoft};
+`
+
+export const SettingIcon = styled.div`
+    width: 3px;
+    height: 3px;
+    background-color: ${({ theme }) => theme.text};
+    border-radius: 50%;
+    box-shadow: 0px 6px 0px ${({ theme }) => theme.text}, 0px 12px 0px ${({ theme }) => theme.text};
 `

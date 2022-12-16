@@ -26,13 +26,15 @@ import {
     Subscribe,
     Title,
     VideoWrapper,
+    VideoFrame,
+    ShowMoreButton,
 } from './video.styled'
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { useLocation } from 'react-router-dom'
 import { fetchSuccess, like, dislike } from '../../redux/videoSlice'
 import { subscription } from '../../redux/userSlice'
-import { getVideo } from '../../api/videoApi'
+import { addView, getVideo } from '../../api/videoApi'
 import { addDislike, getUser, addLike, subscribe, unsubscribe } from '../../api/userApi'
 import { format } from 'timeago.js'
 import { User } from '../../models/user'
@@ -79,19 +81,15 @@ const Video = () => {
         }
     }
 
+    const handleEndedVideo = async () => {
+        await addView(currentVideo?._id!)
+    }
+
     return (
         <Container>
             <Content>
                 <VideoWrapper>
-                    <iframe
-                        width='100%'
-                        height='506'
-                        src='https://www.youtube.com/embed/v1ADEPnPt54'
-                        title='YouTube video player'
-                        frameBorder='0'
-                        allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-                        allowFullScreen
-                    ></iframe>
+                    <VideoFrame src={currentVideo?.videoUrl} controls onEnded={handleEndedVideo} />
                 </VideoWrapper>
                 <Title>{currentVideo?.title}</Title>
                 <Details>
@@ -122,7 +120,7 @@ const Video = () => {
                         <ChannelDetail>
                             <ChannelName>{channel?.name}</ChannelName>
                             <ChannelCounter>{channel?.subscribers} subscribers</ChannelCounter>
-                            <Description>{currentVideo?.desc}</Description>
+                            <SmartText text={currentVideo?.desc!} length={100} />
                         </ChannelDetail>
                     </ChannelInfo>
                     <Subscribe onClick={handleClick('subscribe')}>{currentUser?.subscribedUsers.includes(channel?._id!) ? 'SUBSCRIBED' : 'SUBSCRIBE'}</Subscribe>
@@ -132,6 +130,20 @@ const Video = () => {
             </Content>
             <Recommendation>{/* <Card type='sm' /> */}</Recommendation>
         </Container>
+    )
+}
+
+const SmartText = ({ text, length }: { text: string; length: number }) => {
+    const [showLess, setShowLess] = useState<Boolean>(true)
+
+    if (text.length < length) {
+        return <Description>{text}</Description>
+    }
+    return (
+        <Description>
+            {showLess ? `${text.slice(0, length)}... ` : text}
+            <ShowMoreButton onClick={() => setShowLess(!showLess)}>Read {showLess ? 'More' : 'Less'}</ShowMoreButton>
+        </Description>
     )
 }
 
