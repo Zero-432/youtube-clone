@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import Logging from '../library/Logging'
-import { addViewVid, createVideo, deleteVid, getVid, randomVideo, searchVideo, subVideo, tagVideo, trendVideo, update } from '../service/video.service'
+import { addViewVid, createVideo, deleteVid, getVid, listVid, randomVideo, searchVideo, subVideo, tagVideo, trendVideo, update } from '../service/video.service'
 import Error from '../utils/Error'
 
 export const addVideo = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
@@ -8,7 +8,7 @@ export const addVideo = async (req: Request, res: Response, next: NextFunction):
         const newVideo = await createVideo(req.user?.id, req.body)
         await newVideo.save()
         res.status(200).json(newVideo)
-    } catch (err) {
+    } catch (err: any) {
         Logging.error(err)
         Error(err, res)
     }
@@ -18,7 +18,7 @@ export const updateVideo = async (req: Request, res: Response, next: NextFunctio
     try {
         const updatedVideo = await update(req.params.id, req.user?.id, req.body)
         res.status(200).json(updatedVideo)
-    } catch (err) {
+    } catch (err: any) {
         Logging.error(err)
         Error(err, res)
     }
@@ -28,7 +28,7 @@ export const deleteVideo = async (req: Request, res: Response, next: NextFunctio
     try {
         await deleteVid(req.params.id, req.user?.id)
         res.status(200).json('The video has been deleted.')
-    } catch (err) {
+    } catch (err: any) {
         Logging.error(err)
         Error(err, res)
     }
@@ -38,7 +38,7 @@ export const getVideo = async (req: Request, res: Response, next: NextFunction):
     try {
         const video = await getVid(req.params.id)
         res.status(200).json(video)
-    } catch (err) {
+    } catch (err: any) {
         Logging.error(err)
         Error(err, res)
     }
@@ -48,7 +48,7 @@ export const addView = async (req: Request, res: Response, next: NextFunction): 
     try {
         await addViewVid(req.params.id)
         res.status(200).json('The view has been increased.')
-    } catch (err) {
+    } catch (err: any) {
         Logging.error(err)
         Error(err, res)
     }
@@ -58,7 +58,7 @@ export const random = async (req: Request, res: Response, next: NextFunction): P
     try {
         const videos = await randomVideo()
         res.status(200).json(videos)
-    } catch (err) {
+    } catch (err: any) {
         Logging.error(err)
         Error(err, res)
     }
@@ -68,7 +68,7 @@ export const trend = async (req: Request, res: Response, next: NextFunction): Pr
     try {
         const videos = await trendVideo()
         res.status(200).json(videos)
-    } catch (err) {
+    } catch (err: any) {
         Logging.error(err)
         Error(err, res)
     }
@@ -88,7 +88,7 @@ export const getByTag = async (req: Request, res: Response, next: NextFunction):
     try {
         const videos = await tagVideo(req.query.tags as string)
         res.status(200).json(videos)
-    } catch (err) {
+    } catch (err: any) {
         Logging.error(err)
         Error(err, res)
     }
@@ -98,7 +98,17 @@ export const search = async (req: Request, res: Response, next: NextFunction): P
     try {
         const videos = await searchVideo(req.query.q as string)
         res.status(200).json(videos)
-    } catch (err) {
+    } catch (err: any) {
+        Logging.error(err)
+        Error(err, res)
+    }
+}
+
+export const library = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
+    try {
+        const listVideo = await listVid(req.user?.id)
+        res.status(200).json(listVideo)
+    } catch (err: any) {
         Logging.error(err)
         Error(err, res)
     }

@@ -91,3 +91,7 @@ export async function tagVideo(tagsVideo: string) {
 export async function searchVideo(input: string) {
     return await Video.find({ title: { $regex: input, $options: 'i' } }).limit(40)
 }
+
+export async function listVid(idUser: string) {
+    return await Video.find({ userId: idUser })
+}

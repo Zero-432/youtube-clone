@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { addVideo, addView, deleteVideo, getByTag, getVideo, random, search, sub, trend, updateVideo } from '../controllers/video.controller'
+import { addVideo, addView, deleteVideo, getByTag, getVideo, library, random, search, sub, trend, updateVideo } from '../controllers/video.controller'
 import { verifyToken } from '../utils/jwt.verifyToken'
 
 const router = Router()
@@ -27,6 +27,9 @@ router.get('/trend', trend)
 
 //sub
 router.get('/sub', verifyToken, sub)
+
+//library
+router.get('/library', verifyToken, library)
 
 //tag
 router.get('/tags', getByTag)
