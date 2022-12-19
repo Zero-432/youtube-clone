@@ -37,21 +37,31 @@ const userSlice = createSlice({
             state.error = false
             state.currentUser = undefined
         },
-        subscription: (state, action: PayloadAction<string>) => {
-            if (state.currentUser?.subscribedUsers.includes(action.payload)) {
+        subscription: (state, action: PayloadAction<string | undefined>) => {
+            if (action.payload && state.currentUser?.subscribedUsers.includes(action.payload)) {
                 state.currentUser?.subscribedUsers.splice(
                     state.currentUser.subscribedUsers.findIndex((userId) => userId === action.payload),
                     1
                 )
             } else {
-                state.currentUser?.subscribedUsers.push(action.payload)
+                action.payload && state.currentUser?.subscribedUsers.push(action.payload)
+            }
+        },
+        addSub: (state) => {
+            if (state.currentUser) {
+                state.currentUser.subscribers += 1
+            }
+        },
+        minusSub: (state) => {
+            if (state.currentUser) {
+                state.currentUser.subscribers -= 1
             }
         },
     },
 })
 
 // Actions
-export const { login, loginSuccess, loginFailure, logout, subscription } = userSlice.actions
+export const { login, loginSuccess, loginFailure, logout, subscription, addSub, minusSub } = userSlice.actions
 
 // Reducer
 export default userSlice.reducer

@@ -62,27 +62,28 @@ const Video = () => {
     }, [path, dispatch])
 
     const handleClick = (type: string) => async () => {
+        if (!channel?._id) return
         if (type === 'like') {
-            await addLike(currentVideo?._id!)
-            dispatch(like(currentUser?._id!))
+            await addLike(currentVideo?._id)
+            dispatch(like(currentUser?._id))
         } else if (type === 'dislike') {
-            await addDislike(currentVideo?._id!)
-            dispatch(dislike(currentUser?._id!))
+            await addDislike(currentVideo?._id)
+            dispatch(dislike(currentUser?._id))
         } else if (type === 'subscribe') {
-            if (currentUser?.subscribedUsers.includes(channel?._id!)) {
-                await unsubscribe(channel?._id!)
+            if (currentUser?.subscribedUsers.includes(channel?._id)) {
+                unsubscribe(channel?._id)
             } else {
-                await subscribe(channel?._id!)
+                await subscribe(channel?._id)
             }
             const videoRes = await getVideo(path)
             const refreshChannel = await getUser(videoRes.data.userId)
             setChannel(refreshChannel.data)
-            dispatch(subscription(channel?._id!))
+            dispatch(subscription(channel?._id))
         }
     }
 
     const handleEndedVideo = async () => {
-        await addView(currentVideo?._id!)
+        await addView(currentVideo?._id)
     }
 
     return (

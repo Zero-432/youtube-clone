@@ -28,8 +28,8 @@ const videoSlice = createSlice({
             state.loading = false
             state.error = true
         },
-        like: (state, action: PayloadAction<string>) => {
-            if (!state.currentVideo?.likes.includes(action.payload)) {
+        like: (state, action: PayloadAction<string | undefined>) => {
+            if (action.payload && !state.currentVideo?.likes.includes(action.payload)) {
                 state.currentVideo?.likes.push(action.payload)
                 state.currentVideo?.dislikes.splice(
                     state.currentVideo.dislikes.findIndex((userId) => userId === action.payload),
@@ -37,8 +37,8 @@ const videoSlice = createSlice({
                 )
             }
         },
-        dislike: (state, action: PayloadAction<string>) => {
-            if (!state.currentVideo?.dislikes.includes(action.payload)) {
+        dislike: (state, action: PayloadAction<string | undefined>) => {
+            if (action.payload && !state.currentVideo?.dislikes.includes(action.payload)) {
                 state.currentVideo?.dislikes.push(action.payload)
                 state.currentVideo?.likes.splice(
                     state.currentVideo.likes.findIndex((userId) => userId === action.payload),

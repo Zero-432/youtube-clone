@@ -14,7 +14,7 @@ export const addVideo = (params: {}) => {
     return postMethod(`videos`, params)
 }
 
-export const addView = (id: string) => {
+export const addView = (id?: string) => {
     return axiosConfig.put(`videos/view/${id}`)
 }
 

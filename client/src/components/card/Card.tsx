@@ -3,7 +3,9 @@ import { format } from 'timeago.js'
 import { getUser } from '../../api/userApi'
 import { User } from '../../models/user'
 import { Video } from '../../models/video'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
 import { ChannelImage, ChannelName, Container, Details, Info, Texts, Title, Image, TextWrapper, SettingIcon, LinkVideo } from './card.styled'
+import Icon from '@mui/material/Icon'
 
 const Card = ({ type, video, settingType }: { type: string; video: Video; settingType: string }) => {
     const [channel, setChannel] = useState<User>()
@@ -16,12 +18,14 @@ const Card = ({ type, video, settingType }: { type: string; video: Video; settin
         fetchChannel()
     }, [video.userId])
 
-    const handleClick = (e: React.KeyboardEvent | React.MouseEvent) => {
-        console.log(1)
+    const handleClick = (e: any) => {
+        if (e.target.classList[2] === 'setting') {
+            e.preventDefault()
+        }
     }
 
     return (
-        <LinkVideo to={`/video/${video._id}`} style={{ textDecoration: 'none' }}>
+        <LinkVideo to={`/video/${video._id}`} style={{ textDecoration: 'none' }} onClick={handleClick}>
             <Container type={type}>
                 <Image type={type} src={video.imgUrl} />
                 <Details type={type}>
@@ -34,7 +38,7 @@ const Card = ({ type, video, settingType }: { type: string; video: Video; settin
                                 {video.views} views • {format(video.createdAt)}
                             </Info>
                         </Texts>
-                        <SettingIcon onClick={handleClick} />
+                        <SettingIcon className="setting" />
                     </TextWrapper>
                 </Details>
             </Container>
