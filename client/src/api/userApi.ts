@@ -1,7 +1,7 @@
 import axiosConfig from './apiConfig'
 import { putMethod } from '../utils/verifyAuth'
 
-export const getUser = (id: string) => {
+export const getUser = (id?: string) => {
     return axiosConfig.get(`users/find/${id}`)
 }
 

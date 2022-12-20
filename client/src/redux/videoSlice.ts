@@ -20,7 +20,7 @@ const videoSlice = createSlice({
         fetchStart: (state) => {
             state.loading = true
         },
-        fetchSuccess: (state, action: PayloadAction<Video>) => {
+        fetchSuccess: (state, action: PayloadAction<Video | undefined>) => {
             state.loading = false
             state.currentVideo = action.payload
         },

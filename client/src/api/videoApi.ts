@@ -1,5 +1,4 @@
 import axiosConfig from './apiConfig'
-import { Video } from '../models/video'
 import { deleteMethod, getMethod, postMethod } from '../utils/verifyAuth'
 
 export const getListVideo = (type: string) => {
@@ -18,6 +17,6 @@ export const addView = (id?: string) => {
     return axiosConfig.put(`videos/view/${id}`)
 }
 
-export const deleteVideo = (id: string) => {
+export const deleteVideo = (id?: string) => {
     return deleteMethod(`videos/${id}`)
 }

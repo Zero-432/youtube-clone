@@ -3,6 +3,10 @@ import { Link } from 'react-router-dom'
 
 export const LinkVideo = styled(Link)`
     width: ${(props) => props.type !== 'sm' && '360px'};
+
+    :hover .setting {
+        opacity: 1;
+    }
 `
 
 export const Container = styled.div<{ type: string }>`
@@ -66,4 +70,26 @@ export const SettingIcon = styled.div`
     background-color: ${({ theme }) => theme.text};
     border-radius: 50%;
     box-shadow: 0px 6px 0px ${({ theme }) => theme.text}, 0px 12px 0px ${({ theme }) => theme.text};
+    margin-left: auto;
+`
+
+export const SettingWrapper = styled.div<{ opacity: string }>`
+    width: 20px;
+    height: 20px;
+    opacity: ${(props) => (props.opacity === 'true' ? 1 : 0)};
+`
+
+export const MenuSetting = styled.div`
+    font-size: 14px;
+    padding: 12px;
+    color: ${({ theme }) => theme.text};
+    background-color: ${({ theme }) => theme.bg};
+`
+
+export const MenuItem = styled.button`
+    background-color: transparent;
+
+    :hover {
+        background-color: ${({ theme }) => theme.text};
+    }
 `

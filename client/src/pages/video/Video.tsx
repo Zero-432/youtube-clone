@@ -6,7 +6,6 @@ import ThumbDownOffAltOutlinedIcon from '@mui/icons-material/ThumbDownOffAltOutl
 import ReplyOutlinedIcon from '@mui/icons-material/ReplyOutlined'
 import AddTaskOutlinedIcon from '@mui/icons-material/AddTaskOutlined'
 import Comments from '../../components/comments/Comments'
-import Card from '../../components/card/Card'
 import {
     Button,
     Buttons,
@@ -88,48 +87,52 @@ const Video = () => {
 
     return (
         <Container>
-            <Content>
-                <VideoWrapper>
-                    <VideoFrame src={currentVideo?.videoUrl} controls onEnded={handleEndedVideo} />
-                </VideoWrapper>
-                <Title>{currentVideo?.title}</Title>
-                <Details>
-                    <Info>
-                        {currentVideo?.views} views • {format(currentVideo?.createdAt!)}
-                    </Info>
-                    <Buttons>
-                        <Button onClick={handleClick('like')}>
-                            {currentVideo?.likes.includes(currentUser?._id!) ? <ThumbUpIcon /> : <ThumbUpOutlinedIcon />}
-                            {currentVideo?.likes.length}
-                        </Button>
-                        <Button onClick={handleClick('dislike')}>
-                            {currentVideo?.dislikes.includes(currentUser?._id!) ? <ThumbDownIcon /> : <ThumbDownOffAltOutlinedIcon />}
-                            {currentVideo?.dislikes.length}
-                        </Button>
-                        <Button>
-                            <ReplyOutlinedIcon /> Share
-                        </Button>
-                        <Button>
-                            <AddTaskOutlinedIcon /> Save
-                        </Button>
-                    </Buttons>
-                </Details>
-                <Hr />
-                <Channel>
-                    <ChannelInfo>
-                        <Image src={channel?.img} />
-                        <ChannelDetail>
-                            <ChannelName>{channel?.name}</ChannelName>
-                            <ChannelCounter>{channel?.subscribers} subscribers</ChannelCounter>
-                            <SmartText text={currentVideo?.desc!} length={100} />
-                        </ChannelDetail>
-                    </ChannelInfo>
-                    <Subscribe onClick={handleClick('subscribe')}>{currentUser?.subscribedUsers.includes(channel?._id!) ? 'SUBSCRIBED' : 'SUBSCRIBE'}</Subscribe>
-                </Channel>
-                <Hr />
-                <Comments videoId={currentVideo?._id!} />
-            </Content>
-            <Recommendation>{/* <Card type='sm' /> */}</Recommendation>
+            {currentVideo && (
+                <>
+                    <Content>
+                        <VideoWrapper>
+                            <VideoFrame src={currentVideo.videoUrl} controls onEnded={handleEndedVideo} />
+                        </VideoWrapper>
+                        <Title>{currentVideo.title}</Title>
+                        <Details>
+                            <Info>
+                                {currentVideo.views} views • {format(currentVideo.createdAt)}
+                            </Info>
+                            <Buttons>
+                                <Button onClick={handleClick('like')}>
+                                    {currentUser?._id && currentVideo.likes.includes(currentUser._id) ? <ThumbUpIcon /> : <ThumbUpOutlinedIcon />}
+                                    {currentVideo.likes.length}
+                                </Button>
+                                <Button onClick={handleClick('dislike')}>
+                                    {currentUser?._id && currentVideo?.dislikes.includes(currentUser._id) ? <ThumbDownIcon /> : <ThumbDownOffAltOutlinedIcon />}
+                                    {currentVideo.dislikes.length}
+                                </Button>
+                                <Button>
+                                    <ReplyOutlinedIcon /> Share
+                                </Button>
+                                <Button>
+                                    <AddTaskOutlinedIcon /> Save
+                                </Button>
+                            </Buttons>
+                        </Details>
+                        <Hr />
+                        <Channel>
+                            <ChannelInfo>
+                                <Image src={channel?.img} />
+                                <ChannelDetail>
+                                    <ChannelName>{channel?.name}</ChannelName>
+                                    <ChannelCounter>{channel?.subscribers} subscribers</ChannelCounter>
+                                    <SmartText text={currentVideo.desc} length={100} />
+                                </ChannelDetail>
+                            </ChannelInfo>
+                            <Subscribe onClick={handleClick('subscribe')}>{currentUser && currentUser.subscribedUsers.includes(channel?._id!) ? 'SUBSCRIBED' : 'SUBSCRIBE'}</Subscribe>
+                        </Channel>
+                        <Hr />
+                        <Comments videoId={currentVideo?._id!} />
+                    </Content>
+                    <Recommendation>{/* <Card type='sm' /> */}</Recommendation>
+                </>
+            )}
         </Container>
     )
 }
