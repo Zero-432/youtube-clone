@@ -21,7 +21,6 @@ import {
     Hr,
     Info,
     Image,
-    Recommendation,
     Subscribe,
     Title,
     VideoWrapper,
@@ -37,6 +36,7 @@ import { addView, getVideo } from '../../api/videoApi'
 import { addDislike, getUser, addLike, subscribe, unsubscribe } from '../../api/userApi'
 import { format } from 'timeago.js'
 import { User } from '../../models/user'
+import Recommendation from '../../components/recommendation/Recommendation'
 
 const Video = () => {
     const { currentUser } = useAppSelector((state) => state.user)
@@ -130,7 +130,7 @@ const Video = () => {
                         <Hr />
                         <Comments videoId={currentVideo?._id!} />
                     </Content>
-                    <Recommendation>{/* <Card type='sm' /> */}</Recommendation>
+                    <Recommendation tags={currentVideo.tags} currentVideoId={currentVideo._id}></Recommendation>
                 </>
             )}
         </Container>

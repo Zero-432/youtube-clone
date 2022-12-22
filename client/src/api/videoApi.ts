@@ -20,3 +20,11 @@ export const addView = (id?: string) => {
 export const deleteVideo = (id?: string) => {
     return deleteMethod(`videos/${id}`)
 }
+
+export const tagVideo = (tags: [string]) => {
+    return axiosConfig.get(`/videos/tags?tags=${tags}`)
+}
+
+export const searchVideo = (query: string) => {
+    return axiosConfig.get(`/videos/search${query}`)
+}

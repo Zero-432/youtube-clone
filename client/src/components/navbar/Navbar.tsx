@@ -1,15 +1,13 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 import VideoCallOutlinedIcon from '@mui/icons-material/VideoCallOutlined'
-import Person from '@mui/icons-material/Person'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import Divider from '@mui/material/Divider'
 import IconButton from '@mui/material/IconButton'
-import Typography from '@mui/material/Typography'
 import Tooltip from '@mui/material/Tooltip'
 import PersonAdd from '@mui/icons-material/PersonAdd'
 import Settings from '@mui/icons-material/Settings'
@@ -27,6 +25,9 @@ const Navbar = () => {
     const [open, setOpen] = useState<boolean>(false)
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const show = Boolean(anchorEl)
+    const [query, setQuery] = useState<string>('')
+
+    const navigate = useNavigate()
 
     const dispatch = useAppDispatch()
 
@@ -42,13 +43,22 @@ const Navbar = () => {
         dispatch(logout())
     }
 
+    const handleKeyPress = async (e: any) => {
+        if (e.key === 'Enter') {
+            e.preventDefault()
+            navigate(`/search?q=${query}`)
+
+            e.target.value = ''
+        }
+    }
+
     return (
         <>
             <Container>
                 <Wrapper>
                     <Search>
-                        <Input placeholder='Search' />
-                        <SearchOutlinedIcon />
+                        <Input placeholder='Search' onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)} onKeyPress={handleKeyPress} />
+                        <SearchOutlinedIcon onClick={() => navigate(`/search?q=${query}`)} />
                     </Search>
                     {currentUser ? (
                         <User>

@@ -11,7 +11,6 @@ import { signInWithPopup } from 'firebase/auth'
 import { googleSignin, signin, signup } from '../../api/authApi'
 
 const SignIn = () => {
-    const [name, setName] = useState('')
     const [password, setPassword] = useState('')
     const [email, setEmail] = useState('')
     const [inputs, setInputs] = useState({})

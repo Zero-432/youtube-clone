@@ -5,8 +5,9 @@ import { useNavigate } from 'react-router-dom'
 import CloseIcon from '@mui/icons-material/Close'
 import { Button, Container, Desc, Input, Label, Title, Wrapper } from './upload.styled'
 import { addVideo } from '../../api/videoApi'
+import { Video } from '../../models/video'
 
-const Upload = ({ setOpen }: { setOpen: Dispatch<SetStateAction<boolean>> }) => {
+const Upload = ({ setOpen, dataVideo }: { setOpen: Dispatch<SetStateAction<boolean>>; dataVideo?: Video }) => {
     const [img, setImg] = useState<File>()
     const [video, setVideo] = useState<File>()
     const [imgPerc, setImgPerc] = useState(0)
@@ -25,7 +26,6 @@ const Upload = ({ setOpen }: { setOpen: Dispatch<SetStateAction<boolean>> }) => 
     const handleTags = (e: any) => {
         setTags(e.target.value.split(','))
     }
-
     const uploadFile = (file: File, urlType: string, type: string) => {
         const storage = getStorage(app)
         const fileName = new Date().getTime() + file.name
@@ -60,11 +60,11 @@ const Upload = ({ setOpen }: { setOpen: Dispatch<SetStateAction<boolean>> }) => 
     }
 
     useEffect(() => {
-        video && uploadFile(video, 'videoUrl', 'images')
+        video && uploadFile(video, 'videoUrl', 'videos')
     }, [video])
 
     useEffect(() => {
-        img && uploadFile(img, 'imgUrl', 'videos')
+        img && uploadFile(img, 'imgUrl', 'images')
     }, [img])
 
     const handleUpload = async (e: any) => {
@@ -81,11 +81,13 @@ const Upload = ({ setOpen }: { setOpen: Dispatch<SetStateAction<boolean>> }) => 
                 <Title>Upload a New Video</Title>
                 <Label>Video:</Label>
                 {videoPerc > 0 ? 'Uploading:' + videoPerc : <Input type='file' accept='video/*' onChange={(e) => setVideo(e.target.files![0])} />}
-                <Input type='text' placeholder='Title' name='title' onChange={handleChange} />
-                <Desc placeholder='Description' name='desc' rows={8} onChange={handleChange} />
-                <Input type='text' placeholder='Separate the tags with commas.' onChange={handleTags} />
+                {dataVideo && <video src={dataVideo.videoUrl} width='30%' controls />}
+                <Input type='text' placeholder='Title' name='title' value={dataVideo?.title} onChange={handleChange} />
+                <Desc placeholder='Description' name='desc' rows={8} value={dataVideo?.desc} onChange={handleChange} />
+                <Input type='text' placeholder='Separate the tags with commas.' value={dataVideo?.tags} onChange={handleTags} />
                 <Label>Image:</Label>
                 {imgPerc > 0 ? 'Uploading:' + imgPerc + '%' : <Input type='file' accept='image/*' onChange={(e) => setImg(e.target.files![0])} />}
+                {dataVideo && <img alt='loading...' src={dataVideo.imgUrl} width='15%' />}
                 <Button onClick={handleUpload}>Upload</Button>
             </Wrapper>
         </Container>

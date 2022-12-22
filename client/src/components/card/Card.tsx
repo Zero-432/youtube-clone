@@ -6,10 +6,12 @@ import { Video } from '../../models/video'
 import { Popover, MenuItem } from '@mui/material'
 import { ChannelImage, ChannelName, Container, Details, Info, Texts, Title, Image, TextWrapper, SettingIcon, LinkVideo, SettingWrapper, MenuSetting } from './card.styled'
 import { deleteVideo, getListVideo } from '../../api/videoApi'
+import Upload from '../upload/Upload'
 
-const Card = ({ type, video, settingType, reload }: { type: string; video: Video; settingType: string; reload: any }) => {
+const Card = ({ type, video, settingType, reload }: { type: string; video: Video; settingType?: string; reload?: any }) => {
     const [channel, setChannel] = useState<User>()
-    const [anchorEl, setAnchorEl] = React.useState<HTMLDivElement | null>(null)
+    const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
+    const [openEdit, setOpenEdit] = useState<boolean>(false)
 
     useEffect(() => {
         const fetchChannel = async () => {
@@ -26,8 +28,9 @@ const Card = ({ type, video, settingType, reload }: { type: string; video: Video
     }
 
     const handleEditVideo = (type: string) => async (e: any) => {
+        if (settingType !== 'library') return
         if (type === 'edit') {
-            // todo later
+            setOpenEdit(true)
         }
         if (type === 'delete') {
             await deleteVideo(video._id)
@@ -58,7 +61,7 @@ const Card = ({ type, video, settingType, reload }: { type: string; video: Video
                     </Details>
                 </Container>
             </LinkVideo>
-            {settingType === 'library' && (
+            {settingType === 'library' && !openEdit && (
                 <Popover open={Boolean(anchorEl)} anchorEl={anchorEl} onClose={() => setAnchorEl(null)} anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}>
                     <MenuSetting>
                         <MenuItem sx={{ fontSize: 14 }} onClick={handleEditVideo('edit')}>
@@ -70,6 +73,7 @@ const Card = ({ type, video, settingType, reload }: { type: string; video: Video
                     </MenuSetting>
                 </Popover>
             )}
+            {openEdit && <Upload setOpen={setOpenEdit} dataVideo={video} />}
         </>
     )
 }
