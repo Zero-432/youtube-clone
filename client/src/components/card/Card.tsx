@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Dispatch, SetStateAction } from 'react'
+import React, { useEffect, useState } from 'react'
 import { format } from 'timeago.js'
 import { getUser } from '../../api/userApi'
 import { User } from '../../models/user'

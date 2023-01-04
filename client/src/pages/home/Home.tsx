@@ -1,23 +1,29 @@
-import axios from 'axios'
-import React, { useState, useEffect, FunctionComponent } from 'react'
-import { getListVideo } from '../../api/videoApi'
+import React, { useState, useEffect } from 'react'
+import { getListVideo, tagVideo } from '../../api/videoApi'
 import Card from '../../components/card/Card'
+import { Video } from '../../models/video'
 import { Container } from './home.styled'
 
-const Home = ({ type }: { type: string }) => {
+const Home = ({ type, tag }: { type?: string; tag?: string }) => {
     const [videos, setVideos] = useState([])
 
     useEffect(() => {
+        let res: any
         const fetchVideo = async () => {
-            const res = await getListVideo(type)
+            if (type) {
+                res = await getListVideo(type)
+            }
+            if (tag) {
+                res = await tagVideo([tag])
+            }
             setVideos(res.data)
         }
         fetchVideo()
-    }, [type])
+    }, [type, tag])
 
     return (
         <Container>
-            {videos.map((video: any) => (
+            {videos.map((video: Video) => (
                 <Card type='' key={video._id} video={video} settingType={type} reload={setVideos} />
             ))}
         </Container>

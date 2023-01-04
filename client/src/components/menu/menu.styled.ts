@@ -3,11 +3,15 @@ import styled from 'styled-components'
 export const Container = styled.div`
     flex: 1;
     background-color: ${({ theme }) => theme.bgLighter};
-    height: 100%;
+    height: 100vh;
     color: ${({ theme }) => theme.text};
     font-size: 14px;
     position: sticky;
     top: 0;
+
+    @media screen and (max-width: 1439px) {
+        height: auto;
+    }
 `
 export const Wrapper = styled.div`
     padding: 18px 26px;
