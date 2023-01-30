@@ -1,12 +1,11 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 
 const axiosConfig: AxiosInstance = axios.create({
-    baseURL: 'http://localhost:5000/api/',
+    baseURL: 'https://youtube-clone-api-ashy.vercel.app/api/',
     headers: {
         'Content-type': 'application/json',
-        'Access-Control-Allow-Origin': '*',  
+        'Access-Control-Allow-Origin': '*',
     },
-
 })
 
 axiosConfig.interceptors.request.use(async (config: AxiosRequestConfig) => config)
