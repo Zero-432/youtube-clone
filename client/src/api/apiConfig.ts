@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 
 const axiosConfig: AxiosInstance = axios.create({
-    baseURL: 'https://youtube-clone-api-ashy.vercel.app/api/',
+    baseURL: process.env.REACT_APP_API_URL,
     headers: {
         'Content-type': 'application/json',
         'Access-Control-Allow-Origin': '*',
