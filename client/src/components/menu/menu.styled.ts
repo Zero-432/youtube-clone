@@ -9,8 +9,8 @@ export const Container = styled.div`
     position: sticky;
     top: 0;
 
-    @media screen and (max-width: 1439px) {
-        height: auto;
+    @media screen and (max-width: 1500px) {
+        height: 100%;
     }
 `
 export const Wrapper = styled.div`

@@ -15,7 +15,7 @@ export const Container = styled.div`
 
 export const Wrapper = styled.div`
     width: 600px;
-    height: 800px;
+    height: auto;
     background-color: ${({ theme }) => theme.bgLighter};
     color: ${({ theme }) => theme.text};
     padding: 20px;
